@@ -21,6 +21,6 @@ import board.views
 app_name = 'board'
 
 urlpatterns = [
-    path('admin/', admin.site.urls),
-    path('', include('board.urls', namespace='api_recommend_tag'))
+    url(r'^admin/', admin.site.urls),
+    url(r'^$', include('board.urls', namespace='api_recommend_tag'))
 ]

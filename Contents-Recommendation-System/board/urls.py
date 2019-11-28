@@ -5,5 +5,5 @@ app_name = 'board'
 
 
 urlpatterns = [
-    path('', views.recommend_tag, name='api_recommend_tag')
+    url(r'^$', views.recommend_tag, name='api_recommend_tag')
 ]
