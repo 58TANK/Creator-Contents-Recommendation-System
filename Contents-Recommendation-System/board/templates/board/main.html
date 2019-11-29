@@ -74,7 +74,7 @@
                 {% for item in items %}
                     <tr>
                         <td>{{item.no|safe}}</td>
-                        <td id = "f_tag">{{item.tag1|safe}}</td>
+                        <td><a href="javascript:$('input[type=hidden][name=select_tag]').val($('input[type=hidden][name=select_tag]').val()+','+'{{item.tag1|safe}}');$('#searchform').submit();">{{item.tag1|safe}}</a></td>
                         <td><a onclick="click_tag('{{item.tag2|safe}}');">{{item.tag2|safe}}</a></td>
                         <td><a onclick="click_tag('{{item.tag3|safe}}');">{{item.tag3|safe}}</a></td>
                         <td><a onclick="click_tag('{{item.tag4|safe}}');">{{item.tag4|safe}}</a></td>
