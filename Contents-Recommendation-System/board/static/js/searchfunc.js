@@ -45,22 +45,16 @@ function mySubmit(index){
     document.f_searchform.submit();
 }
 
-//function click_tag()
-//{
-////    var select = $("input[type=hidden][name=select_tag]").val();
-////    if(!select)
-////    {
-////        $("input[type=hidden][name=select_tag]").val(temp);
-////    }
-////    else
-////    {
-////        $("input[type=hidden][name=select_tag]").val(select + "," + temp);
-////    }
-//    alert("temp")
-//    //$('#searchform').submit();
-//}
-
-$("#f_tag").click(function(){
-        alert("test");
+function click_tag(temp)
+{
+    var select = $("input[type=hidden][name=select_tag]").val();
+    if(!select)
+    {
+        $("input[type=hidden][name=select_tag]").val(temp);
     }
-)
+    else
+    {
+        $("input[type=hidden][name=select_tag]").val(select + "," + temp);
+    }
+    $('#searchform').submit();
+}

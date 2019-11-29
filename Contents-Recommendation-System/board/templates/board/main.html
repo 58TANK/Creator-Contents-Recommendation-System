@@ -51,9 +51,9 @@
                 </select>
                 영상 개수
                 <select name = "searchvideo" type="text" value="{{searchvideo}}">
-                    <option value = "50" {% if searchvideo == "50"%} selected = "selected"{% endif %}>50개</option>
-                    <option value = "100" {% if searchvideo == "100"%} selected = "selected"{% endif %}>100개</option>
-                    <option value = "150" {% if searchvideo == "150"%} selected = "selected"{% endif %}>150개</option>
+                    <option value = "40" {% if searchvideo == "40"%} selected = "selected"{% endif %}>40개</option>
+                    <option value = "80" {% if searchvideo == "80"%} selected = "selected"{% endif %}>80개</option>
+                    <option value = "120" {% if searchvideo == "120"%} selected = "selected"{% endif %}>120개</option>
                 </select>
                 <input id = "f_keyword" name ="youtubeURL" type="text" placeholder= "Put Channel ID" value = "{{keyword}}" >
                 <button id = "f_submit" type = "submit" value = "검색">검색</button>
@@ -68,18 +68,14 @@
                     <th>Tag 2</th>
                     <th>Tag 3</th>
                     <th>Tag 4</th>
-                    <th>Video Title</th>
-                    <th>Video Link</th>
                 </tr>
                 {% for item in items %}
                     <tr>
                         <td>{{item.no|safe}}</td>
-                        <td><a href="javascript:$('input[type=hidden][name=select_tag]').val($('input[type=hidden][name=select_tag]').val()+','+'{{item.tag1|safe}}');$('#searchform').submit();">{{item.tag1|safe}}</a></td>
-                        <td><a onclick="click_tag('{{item.tag2|safe}}');">{{item.tag2|safe}}</a></td>
-                        <td><a onclick="click_tag('{{item.tag3|safe}}');">{{item.tag3|safe}}</a></td>
-                        <td><a onclick="click_tag('{{item.tag4|safe}}');">{{item.tag4|safe}}</a></td>
-                        <td><a onclick="click_tag('{{item.title|safe}}');">{{item.title|safe}}</a></td>
-                        <td><a onclick="click_tag('{{item.link|safe}}');">{{item.link|safe}}</a></td>
+                        <td><a href="javascript:click_tag('{{item.tag1|safe}}');">{{item.tag1|safe}}</a></td>
+                        <td><a href="javascript:click_tag('{{item.tag2|safe}}');">{{item.tag2|safe}}</a></td>
+                        <td><a href="javascript:click_tag('{{item.tag3|safe}}');">{{item.tag3|safe}}</a></td>
+                        <td><a href="javascript:click_tag('{{item.tag4|safe}}');">{{item.tag4|safe}}</a></td>
                     </tr>
                 {% endfor %}
             </table>
