@@ -12,7 +12,7 @@ import requests
 client_id = "vT0sbB55Azv8G7YykLD9"
 client_secret = "dR2M27Ko_X"
 
-API_KEY = "AIzaSyAj1NUQCImuVLxUhE1QAVRdA2mQizAOaHw"
+API_KEY = "AIzaSyCL6LPfeyha23YqMgAqGMuQxrHyoOPutzw"
 pageToken = ""
 videoId_list = []
 title_column = []
@@ -180,18 +180,16 @@ def recommend_tag(request):
             if(result == "final"):
                 if len(select_tag) == 1:
                     tmplist.append(
-                        {"no": 1, "tag1": select_tag[0], "tag2": "", "tag3": "", "tag4": "", "title": "",
-                         "link": ""})
+                        {"no": 1, "tag1": select_tag[0], "tag2": "", "tag3": "", "tag4": ""})
                 elif len(select_tag) == 2:
                     tmplist.append(
-                        {"no": 1, "tag1": select_tag[0], "tag2": select_tag[1], "tag3": "", "tag4": "",
-                         "title": "", "link": ""})
+                        {"no": 1, "tag1": select_tag[0], "tag2": select_tag[1], "tag3": "", "tag4": ""})
                 elif len(select_tag) == 3:
                     tmplist.append({"no": 1, "tag1": select_tag[0], "tag2": select_tag[1], "tag3": select_tag[2],
-                                    "tag4": "", "title": "", "link": ""})
+                                    "tag4": ""})
                 elif len(select_tag) == 4:
                     tmplist.append({"no": 1, "tag1": select_tag[0], "tag2": select_tag[1], "tag3": select_tag[2],
-                                    "tag4": select_tag[3], "title": "", "link": ""})
+                                    "tag4": select_tag[3]})
                 context = {
                     'items': tmplist,
                     'keyword': youtubeURL,
@@ -206,7 +204,7 @@ def recommend_tag(request):
                     if len(select_tag) == 0:
                         tag_1.append(val)
                         tmplist.append(
-                            {"no": idx + 1, "tag1": val, "tag2": "", "tag3": "", "tag4": "", "title": "", "link": ""})
+                            {"no": idx + 1, "tag1": val, "tag2": "", "tag3": "", "tag4": ""})
                     elif len(select_tag) == 1:
                         tag_2.append(val)
                         print(tag_1)
@@ -214,42 +212,33 @@ def recommend_tag(request):
                             print(tag_1[idx])
                             print("minsoo")
                             tmplist.append(
-                                {"no": idx + 1, "tag1": select_tag[0], "tag2": val, "tag3": "", "tag4": "", "title": "",
-                                 "link": ""})
+                                {"no": idx + 1, "tag1": select_tag[0], "tag2": val, "tag3": "", "tag4": ""})
                         else:
-                            tmplist.append({"no": idx + 1, "tag1": "", "tag2": val, "tag3": "", "tag4": "", "title": "",
-                                            "link": ""})
+                            tmplist.append({"no": idx + 1, "tag1": "", "tag2": val, "tag3": "", "tag4": ""})
                     elif len(select_tag) == 2:
                         tag_3.append(val)
                         if tag_1[idx] == select_tag[0]:
                             tmplist.append(
-                                {"no": idx + 1, "tag1": select_tag[0], "tag2": "", "tag3": val, "tag4": "", "title": "",
-                                 "link": ""})
+                                {"no": idx + 1, "tag1": select_tag[0], "tag2": "", "tag3": val, "tag4": ""})
                         elif tag_2[idx] == select_tag[1]:
                             tmplist.append(
-                                {"no": idx + 1, "tag1": "", "tag2": select_tag[1], "tag3": val, "tag4": "", "title": "",
-                                 "link": ""})
+                                {"no": idx + 1, "tag1": "", "tag2": select_tag[1], "tag3": val, "tag4": ""})
                         else:
                             tmplist.append(
-                                {"no": idx + 1, "tag1": "", "tag2": "", "tag3": val, "tag4": "", "title": "",
-                                 "link": ""})
+                                {"no": idx + 1, "tag1": "", "tag2": "", "tag3": val, "tag4": ""})
                     elif len(select_tag) == 3:
                         tag_4.append(val)
                         if tag_1[idx] == select_tag[0]:
                             tmplist.append(
-                                {"no": idx + 1, "tag1": select_tag[0], "tag2": "", "tag3": "", "tag4": val, "title": "",
-                                 "link": ""})
+                                {"no": idx + 1, "tag1": select_tag[0], "tag2": "", "tag3": "", "tag4": val})
                         elif tag_2[idx] == select_tag[1]:
                             tmplist.append(
-                                {"no": idx + 1, "tag1": "", "tag2": select_tag[1], "tag3": "", "tag4": val, "title": "",
-                                 "link": ""})
+                                {"no": idx + 1, "tag1": "", "tag2": select_tag[1], "tag3": "", "tag4": val})
                         elif tag_3[idx] == select_tag[2]:
                             tmplist.append(
-                                {"no": idx + 1, "tag1": "", "tag2": "", "tag3": select_tag[2], "tag4": val, "title": "",
-                                 "link": ""})
+                                {"no": idx + 1, "tag1": "", "tag2": "", "tag3": select_tag[2], "tag4": val})
                         else:
-                            tmplist.append({"no": idx + 1, "tag1": "", "tag2": "", "tag3": "", "tag4": val, "title": "",
-                                            "link": ""})
+                            tmplist.append({"no": idx + 1, "tag1": "", "tag2": "", "tag3": "", "tag4": val})
                 else:
                     break
 
@@ -271,7 +260,7 @@ def recommend_tag(request):
 
         else:
             # 초기 화면
-            tmplist = [{"no": "", "tag1": "", "tag2": "", "tag3": "", "tag4": "", "title": "", "link": ""}]
+            tmplist = [{"no": "", "tag1": "", "tag2": "", "tag3": "", "tag4": ""}]
             context = {
                 'items': tmplist
             }
