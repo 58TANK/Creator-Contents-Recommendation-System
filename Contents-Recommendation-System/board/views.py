@@ -12,7 +12,7 @@ import requests
 client_id = "vT0sbB55Azv8G7YykLD9"
 client_secret = "dR2M27Ko_X"
 
-API_KEY = "AIzaSyCL6LPfeyha23YqMgAqGMuQxrHyoOPutzw"
+API_KEY = "API_KEY"
 pageToken = ""
 videoId_list = []
 title_column = []
