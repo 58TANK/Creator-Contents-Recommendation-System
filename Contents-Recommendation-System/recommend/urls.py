@@ -15,7 +15,6 @@ Including another URLconf
 """
 from django.contrib import admin
 from django.conf.urls import include, url
-from django.urls import path
 import board.views
 
 app_name = 'board'
