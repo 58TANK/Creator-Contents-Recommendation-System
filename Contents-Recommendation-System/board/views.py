@@ -12,17 +12,21 @@ import requests
 client_id = "vT0sbB55Azv8G7YykLD9"
 client_secret = "dR2M27Ko_X"
 
-API_KEY = "AIzaSyCGyaz4W693v1OtSPHTIWCGnhJFJIhDuug"
+API_KEY = "AIzaSyCmXonP88QzDER_pcPSbteleUy9O39_M-g"
 pageToken = ""
 videoId_list = []
-title_column = []
+#title_column = []
 tag_column = []
 view_column = []
 select_tag = []
+tag_1 = []
+tag_2 = []
+tag_3 = []
+tag_4 = []
 
 def store_videoId_list(channelID, API_KEY, token):
     response = requests.get(
-        "https://www.googleapis.com/youtube/v3/search?channelId=" + channelID + "&order=date&part=snippet&type=video&maxResults=10&key=" + API_KEY + "&pageToken=" + token)
+        "https://www.googleapis.com/youtube/v3/search?channelId=" + channelID + "&order=date&part=snippet&type=video&maxResults=40&key=" + API_KEY + "&pageToken=" + token)
     json_data = response.json()
     global pageToken
     pageToken = json_data['nextPageToken']
@@ -31,13 +35,13 @@ def store_videoId_list(channelID, API_KEY, token):
     return
 
 def store_video_info(videoId):
-    response = requests.get("https://www.googleapis.com/youtube/v3/videos?key=" + API_KEY + "&fields=items(snippet(title,tags),statistics(viewCount))&part=snippet,statistics&id=" + videoId)
+    response = requests.get("https://www.googleapis.com/youtube/v3/videos?key=" + API_KEY + "&fields=items(snippet(tags),statistics(viewCount))&part=snippet,statistics&id=" + videoId)
     json_data = response.json()
     if json_data['items'][0]['snippet']['tags'] is not None:
-        title = json_data['items'][0]['snippet']['title']
+        #title = json_data['items'][0]['snippet']['title']
         tags = json_data['items'][0]['snippet']['tags']
         view = json_data['items'][0]['statistics']['viewCount']
-        title_column.append(title)
+        #title_column.append(title)
         tag_column.append(','.join(tags))
         view_column.append(view)
     return
@@ -84,7 +88,7 @@ def calculate_idf(prev_data, select_list):
     # n회차 수행결과 특정 한 영상 하나까지 도달 할 경우
     if data_num == 1:
         print("특정 영상 찝어짐")
-        return []
+        return "final"
 
     # 태그들을 '/' 기준으로 토큰화 하고, 토큰화 된 태그와 해당 태그가 포함된 영상의 조회수를 딕셔너리에 저장
     for i in data.keys():
@@ -126,7 +130,7 @@ def recommend_tag(request):
             searchNum = "10"
         searchVideo = request.GET.get('searchvideo')
         if (searchVideo is None):
-            searchVideo = "50"
+            searchVideo = "40"
         checkfirst = request.GET.get('checkfirst')
         if(checkfirst is None):
             checkfirst = '0'
@@ -140,18 +144,18 @@ def recommend_tag(request):
 
         # 여기부터 조건문줘서 초기화면, 블로그검색, 카페검색 분류
         if(checkfirst == '1'):
-            if (searchVideo == "50"):
+            if (searchVideo == "40"):
                 store_videoId_list(youtubeURL, API_KEY, pageToken)
-                print("영상50개")
-            elif (searchVideo == "100"):
-                store_videoId_list(youtubeURL, API_KEY, pageToken)
-                store_videoId_list(youtubeURL, API_KEY, pageToken)
-                print("영상100개")
-            elif (searchVideo == "150"):
+                print("영상40개")
+            elif (searchVideo == "80"):
                 store_videoId_list(youtubeURL, API_KEY, pageToken)
                 store_videoId_list(youtubeURL, API_KEY, pageToken)
+                print("영상80개")
+            elif (searchVideo == "120"):
                 store_videoId_list(youtubeURL, API_KEY, pageToken)
-                print("영상150개")
+                store_videoId_list(youtubeURL, API_KEY, pageToken)
+                store_videoId_list(youtubeURL, API_KEY, pageToken)
+                print("영상120개")
 
             for i in videoId_list:
                 store_video_info(i)
@@ -167,24 +171,73 @@ def recommend_tag(request):
             result = calculate_idf(tagView_dict, select_tag)
             print("리졀트")
             print(result)
-            # select_tag.append('빅헤드오버워치')
-            # calculate_idf(tagView_dict, select_tag)
-            # select_tag.append('레식')
-            # calculate_idf(tagView_dict, select_tag)
 
             tmplist = []
+            if(result == "final"):
+                if len(select_tag) == 1:
+                    tmplist.append(
+                        {"no": 1, "tag1": select_tag[0], "tag2": "", "tag3": "", "tag4": ""})
+                elif len(select_tag) == 2:
+                    tmplist.append(
+                        {"no": 1, "tag1": select_tag[0], "tag2": select_tag[1], "tag3": "", "tag4": ""})
+                elif len(select_tag) == 3:
+                    tmplist.append({"no": 1, "tag1": select_tag[0], "tag2": select_tag[1], "tag3": select_tag[2],
+                                    "tag4": ""})
+                elif len(select_tag) == 4:
+                    tmplist.append({"no": 1, "tag1": select_tag[0], "tag2": select_tag[1], "tag3": select_tag[2],
+                                    "tag4": select_tag[3]})
+                context = {
+                    'items': tmplist,
+                    'keyword': youtubeURL,
+                    'searchnum': searchNum,
+                    'searchvideo': searchVideo,
+                    'select_tag': select_tag
+                }
+                return render(request, 'board/main.html', context=context)
+
             for idx, val in enumerate(result):
                 if idx < int(searchNum):
                     if len(select_tag) == 0:
-                        tmplist.append({"no": idx+1, "tag1": val, "tag2": "", "tag3": "", "tag4": "", "title": "", "link": ""})
+                        tag_1.append(val)
+                        tmplist.append(
+                            {"no": idx + 1, "tag1": val, "tag2": "", "tag3": "", "tag4": ""})
                     elif len(select_tag) == 1:
-                        tmplist.append({"no": idx+1, "tag1": select_tag[0], "tag2": val, "tag3": "", "tag4": "", "title": "", "link": ""})
+                        tag_2.append(val)
+                        print(tag_1)
+                        if tag_1[idx] == select_tag[0]:
+                            print(tag_1[idx])
+                            print("minsoo")
+                            tmplist.append(
+                                {"no": idx + 1, "tag1": select_tag[0], "tag2": val, "tag3": "", "tag4": ""})
+                        else:
+                            tmplist.append({"no": idx + 1, "tag1": "", "tag2": val, "tag3": "", "tag4": ""})
                     elif len(select_tag) == 2:
-                        tmplist.append({"no": idx+1, "tag1": select_tag[0], "tag2": select_tag[1], "tag3": val, "tag4": "", "title": "", "link": ""})
+                        tag_3.append(val)
+                        if tag_1[idx] == select_tag[0]:
+                            tmplist.append(
+                                {"no": idx + 1, "tag1": select_tag[0], "tag2": "", "tag3": val, "tag4": ""})
+                        elif tag_2[idx] == select_tag[1]:
+                            tmplist.append(
+                                {"no": idx + 1, "tag1": "", "tag2": select_tag[1], "tag3": val, "tag4": ""})
+                        else:
+                            tmplist.append(
+                                {"no": idx + 1, "tag1": "", "tag2": "", "tag3": val, "tag4": ""})
                     elif len(select_tag) == 3:
-                        tmplist.append({"no": idx+1, "tag1": select_tag[0], "tag2": select_tag[1], "tag3": select_tag[2], "tag4": val, "title": "", "link": ""})
+                        tag_4.append(val)
+                        if tag_1[idx] == select_tag[0]:
+                            tmplist.append(
+                                {"no": idx + 1, "tag1": select_tag[0], "tag2": "", "tag3": "", "tag4": val})
+                        elif tag_2[idx] == select_tag[1]:
+                            tmplist.append(
+                                {"no": idx + 1, "tag1": "", "tag2": select_tag[1], "tag3": "", "tag4": val})
+                        elif tag_3[idx] == select_tag[2]:
+                            tmplist.append(
+                                {"no": idx + 1, "tag1": "", "tag2": "", "tag3": select_tag[2], "tag4": val})
+                        else:
+                            tmplist.append({"no": idx + 1, "tag1": "", "tag2": "", "tag3": "", "tag4": val})
                 else:
                     break
+
             print("템프리스트")
             print(tmplist)
             print('변경전')
@@ -203,7 +256,7 @@ def recommend_tag(request):
 
         else:
             # 초기 화면
-            tmplist = [{"no": "", "tag1": "", "tag2": "", "tag3": "", "tag4": "", "title": "", "link": ""}]
+            tmplist = [{"no": "", "tag1": "", "tag2": "", "tag3": "", "tag4": ""}]
             context = {
                 'items': tmplist
             }
