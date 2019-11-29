@@ -1,3 +1,4 @@
+# -*- coding: utf-8 -*-
 import json
 import urllib.request
 import pandas as pd
@@ -11,7 +12,7 @@ import requests
 client_id = "vT0sbB55Azv8G7YykLD9"
 client_secret = "dR2M27Ko_X"
 
-API_KEY = "AIzaSyDXzAdjetUJXQlNJT21fOM73060IV0Gjws"
+API_KEY = "AIzaSyBwF3vhnf_drdrB79Kf2qHUihhhGgTK-co"
 pageToken = ""
 videoId_list = []
 title_column = []
@@ -21,7 +22,7 @@ select_tag = []
 
 def store_videoId_list(channelID, API_KEY, token):
     response = requests.get(
-        "https://www.googleapis.com/youtube/v3/search?channelId=" + channelID + "&order=date&part=snippet&type=video&maxResults=50&key=" + API_KEY + "&pageToken=" + token)
+        "https://www.googleapis.com/youtube/v3/search?channelId=" + channelID + "&order=date&part=snippet&type=video&maxResults=10&key=" + API_KEY + "&pageToken=" + token)
     json_data = response.json()
     global pageToken
     pageToken = json_data['nextPageToken']
@@ -130,44 +131,40 @@ def recommend_tag(request):
         if(checkfirst is None):
             checkfirst = '0'
         select_tag = request.GET.get('select_tag')
-        if(select_tag is None):
-            select_tag = []
-        prev_data = request.GET.get('prev_data')
-        if(prev_data is None):
-            prev_data = {}
-        prev_url = request.GET.get('prev_url')
-        if(prev_url is None):
-            prev_url = ""
-        prev_vdnum = request.GET.get('prev_vdnum')
-        if(prev_vdnum is None):
-            prev_vdnum = '0'
+        if(select_tag is None or select_tag == ''):
+            select_tag = ''
+        else:
+            select_tag = select_tag.split(",")
 
         # 여기부터 조건문줘서 초기화면, 블로그검색, 카페검색 분류
         if(checkfirst == '1'):
-            if(youtubeURL == prev_url and searchVideo == prev_vdnum):
-                tagView_dict = prev_data
-            else:
-                if (searchVideo == "50"):
-                    store_videoId_list(youtubeURL, API_KEY, pageToken)
-                    print("영상50개")
-                elif (searchVideo == "100"):
-                    store_videoId_list(youtubeURL, API_KEY, pageToken)
-                    store_videoId_list(youtubeURL, API_KEY, pageToken)
-                    print("영상100개")
-                elif (searchVideo == "150"):
-                    store_videoId_list(youtubeURL, API_KEY, pageToken)
-                    store_videoId_list(youtubeURL, API_KEY, pageToken)
-                    store_videoId_list(youtubeURL, API_KEY, pageToken)
-                    print("영상150개")
+            if (searchVideo == "50"):
+                store_videoId_list(youtubeURL, API_KEY, pageToken)
+                print("영상50개")
+            elif (searchVideo == "100"):
+                store_videoId_list(youtubeURL, API_KEY, pageToken)
+                store_videoId_list(youtubeURL, API_KEY, pageToken)
+                print("영상100개")
+            elif (searchVideo == "150"):
+                store_videoId_list(youtubeURL, API_KEY, pageToken)
+                store_videoId_list(youtubeURL, API_KEY, pageToken)
+                store_videoId_list(youtubeURL, API_KEY, pageToken)
+                print("영상150개")
 
-                for i in videoId_list:
-                    store_video_info(i)
+            for i in videoId_list:
+                store_video_info(i)
 
-                global tag_column
-                tag_column = delete_blank(tag_column)
-                tagView_dict = dict(zip(tag_column, view_column))
+            global tag_column
+            tag_column = delete_blank(tag_column)
+            tagView_dict = dict(zip(tag_column, view_column))
 
+            print("태그뷰딕셔너리")
+            print(tagView_dict)
+            print("셀렉트태그")
+            print(select_tag)
             result = calculate_idf(tagView_dict, select_tag)
+            print("리졀트")
+            print(result)
             # select_tag.append('빅헤드오버워치')
             # calculate_idf(tagView_dict, select_tag)
             # select_tag.append('레식')
@@ -179,13 +176,11 @@ def recommend_tag(request):
                     tmplist.append({"no": idx+1, "tag1": val, "tag2": "", "tag3": "", "tag4": "", "title": "", "link": ""})
                 else:
                     break
-            #print(tmplist)
+            print("템프리스트")
+            print(tmplist)
 
             context = {
                 'items': tmplist,
-                'prev_data': tagView_dict,
-                'prev_url' : youtubeURL,
-                'prev_vdnum': searchVideo,
                 'keyword': youtubeURL,
                 'searchnum': searchNum,
                 'searchvideo': searchVideo,
