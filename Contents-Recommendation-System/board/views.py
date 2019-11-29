@@ -12,7 +12,7 @@ import requests
 client_id = "vT0sbB55Azv8G7YykLD9"
 client_secret = "dR2M27Ko_X"
 
-API_KEY = "AIzaSyBwF3vhnf_drdrB79Kf2qHUihhhGgTK-co"
+API_KEY = "AIzaSyCGyaz4W693v1OtSPHTIWCGnhJFJIhDuug"
 pageToken = ""
 videoId_list = []
 title_column = []
@@ -135,6 +135,8 @@ def recommend_tag(request):
             select_tag = ''
         else:
             select_tag = select_tag.split(",")
+            while '' in select_tag:
+                select_tag.remove('')
 
         # 여기부터 조건문줘서 초기화면, 블로그검색, 카페검색 분류
         if(checkfirst == '1'):
@@ -173,12 +175,23 @@ def recommend_tag(request):
             tmplist = []
             for idx, val in enumerate(result):
                 if idx < int(searchNum):
-                    tmplist.append({"no": idx+1, "tag1": val, "tag2": "", "tag3": "", "tag4": "", "title": "", "link": ""})
+                    if len(select_tag) == 0:
+                        tmplist.append({"no": idx+1, "tag1": val, "tag2": "", "tag3": "", "tag4": "", "title": "", "link": ""})
+                    elif len(select_tag) == 1:
+                        tmplist.append({"no": idx+1, "tag1": select_tag[0], "tag2": val, "tag3": "", "tag4": "", "title": "", "link": ""})
+                    elif len(select_tag) == 2:
+                        tmplist.append({"no": idx+1, "tag1": select_tag[0], "tag2": select_tag[1], "tag3": val, "tag4": "", "title": "", "link": ""})
+                    elif len(select_tag) == 3:
+                        tmplist.append({"no": idx+1, "tag1": select_tag[0], "tag2": select_tag[1], "tag3": select_tag[2], "tag4": val, "title": "", "link": ""})
                 else:
                     break
             print("템프리스트")
             print(tmplist)
-
+            print('변경전')
+            print(select_tag)
+            select_tag = ",".join(select_tag)
+            print('변경후')
+            print(select_tag)
             context = {
                 'items': tmplist,
                 'keyword': youtubeURL,
