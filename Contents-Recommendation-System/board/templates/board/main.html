@@ -68,8 +68,6 @@
                     <th>Tag 2</th>
                     <th>Tag 3</th>
                     <th>Tag 4</th>
-                    <th>Video Title</th>
-                    <th>Video Link</th>
                 </tr>
                 {% for item in items %}
                     <tr>
@@ -78,8 +76,6 @@
                         <td><a href="javascript:click_tag('{{item.tag2|safe}}');">{{item.tag2|safe}}</a></td>
                         <td><a href="javascript:click_tag('{{item.tag3|safe}}');">{{item.tag3|safe}}</a></td>
                         <td><a href="javascript:click_tag('{{item.tag4|safe}}');">{{item.tag4|safe}}</a></td>
-                        <td><a href="javascript:click_tag('{{item.title|safe}}');">{{item.title|safe}}</a></td>
-                        <td><a href="javascript:click_tag('{{item.link|safe}}');">{{item.link|safe}}</a></td>
                     </tr>
                 {% endfor %}
             </table>
