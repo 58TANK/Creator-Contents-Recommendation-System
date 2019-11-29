@@ -55,13 +55,10 @@
                     <option value = "100" {% if searchvideo == "100"%} selected = "selected"{% endif %}>100개</option>
                     <option value = "150" {% if searchvideo == "150"%} selected = "selected"{% endif %}>150개</option>
                 </select>
-                <input id = "f_keyword" name ="youtubeURL" type="text" placeholder= "Put Channel ID" value = {{keyword}} >
+                <input id = "f_keyword" name ="youtubeURL" type="text" placeholder= "Put Channel ID" value = "{{keyword}}" >
                 <button id = "f_submit" type = "submit" value = "검색">검색</button>
                 <input id= "f_check" name="checkfirst" type = hidden value = "1" />
-                <input id= "f_select" name="select_tag" type = hidden value = {{select_tag}} />
-                <input id= "f_data" name="prev_data" type = hidden value = {{prev_data}} />
-                <input id= "f_url" name="prev_url" type = hidden value = {{prev_url}} />
-                <input id= "f_vdnum" name="prev_vdnum" type = hidden value = {{prev_vdnum}} />
+                <input id= "f_select" name="select_tag" type = hidden value = "{{select_tag}}" />
             </form>
 
             <table class="table table-bordered table-striped" id="employee_table">
@@ -76,13 +73,13 @@
                 </tr>
                 {% for item in items %}
                     <tr>
-                        <td><a href="javascript:$('#searchform').submit();">{{item.no|safe}}</a></td>
-                        <td><a href="javascript:$('#searchform').submit();">{{item.tag1|safe}}</a></td>
-                        <td><a href="javascript:$('#searchform').submit();">{{item.tag2|safe}}</a></td>
-                        <td><a href="javascript:$('#searchform').submit();">{{item.tag3|safe}}</a></td>
-                        <td><a href="javascript:$('#searchform').submit();">{{item.tag4|safe}}</a></td>
-                        <td><a href="javascript:$('#searchform').submit();">{{item.title|safe}}</a></td>
-                        <td><a href="javascript:$('#searchform').submit();">{{item.link|safe}}</a></td>
+                        <td>{{item.no|safe}}</td>
+                        <td id = "f_tag">{{item.tag1|safe}}</td>
+                        <td><a onclick="click_tag('{{item.tag2|safe}}');">{{item.tag2|safe}}</a></td>
+                        <td><a onclick="click_tag('{{item.tag3|safe}}');">{{item.tag3|safe}}</a></td>
+                        <td><a onclick="click_tag('{{item.tag4|safe}}');">{{item.tag4|safe}}</a></td>
+                        <td><a onclick="click_tag('{{item.title|safe}}');">{{item.title|safe}}</a></td>
+                        <td><a onclick="click_tag('{{item.link|safe}}');">{{item.link|safe}}</a></td>
                     </tr>
                 {% endfor %}
             </table>
@@ -104,20 +101,6 @@
     <!-- Custom Theme JavaScript -->
     <script src='{% static "js/creative.js"%}'></script>
     <script src='{% static "js/searchfunc.js"%}'></script>
-    <script>
-    function click_tag()
-    {
-        Var temp = $("input[type=hidden][name=select_tag]").val();
-        if()
-        {
-
-        }
-        else
-        {
-
-        }
-    }
-    </script>
 </body>
 
 </html>
