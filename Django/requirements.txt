@@ -7,7 +7,7 @@ colorama==0.4.1
 cycler==0.10.0
 decorator==4.3.2
 defusedxml==0.5.0
-Django==2.2.4
+Django==2.2.20
 entrypoints==0.3
 gast==0.2.2
 grpcio==1.19.0
